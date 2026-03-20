@@ -8,7 +8,7 @@ import type {
 export const loginUser = async (
     data: LoginRequest
 ): Promise<AuthResponse> => {
-    const response = await fetch(`${BASE_URL}/login`, {
+    const response = await fetch(`${BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export const loginUser = async (
 export const registerUser = async (
     data: RegisterRequest
 ): Promise<AuthResponse> => {
-    const response = await fetch(`${BASE_URL}/register`, {
+    const response = await fetch(`${BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
