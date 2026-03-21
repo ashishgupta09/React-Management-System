@@ -8,88 +8,42 @@ import {
     updateUser,
 } from "../../services/userService";
 import type { UserData, UserFormData } from "../../interfaces/user.interface";
+import { initialFormData, sampleUserData } from "../../constants/user.constants";
 import "../../styles/users.css";
-
-const initialFormData: UserFormData = {
-    firstName: "",
-    lastName: "",
-    maidenName: "",
-    age: 0,
-    gender: "",
-    email: "",
-    phone: "",
-    username: "",
-    password: "",
-    birthDate: "",
-    image: "",
-    bloodGroup: "",
-    height: 0,
-    weight: 0,
-    eyeColor: "",
-    hair: {
-        color: "",
-        type: "",
-    },
-    ip: "",
-    address: {
-        address: "",
-        city: "",
-        state: "",
-        stateCode: "",
-        postalCode: "",
-        coordinates: {
-            lat: 0,
-            lng: 0,
-        },
-        country: "",
-    },
-    macAddress: "",
-    university: "",
-    bank: {
-        cardExpire: "",
-        cardNumber: "",
-        cardType: "",
-        currency: "",
-        iban: "",
-    },
-    company: {
-        department: "",
-        name: "",
-        title: "",
-        address: {
-            address: "",
-            city: "",
-            state: "",
-            stateCode: "",
-            postalCode: "",
-            coordinates: {
-                lat: 0,
-                lng: 0,
-            },
-            country: "",
-        },
-    },
-    ein: "",
-    ssn: "",
-    userAgent: "",
-    crypto: {
-        coin: "",
-        wallet: "",
-        network: "",
-    },
-    role: "",
-};
 
 function Users() {
     const [users, setUsers] = useState<UserData[]>([]);
     const [loading, setLoading] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
-    const [editId, setEditId] = useState<number | null>(null);
+    const [editId, setEditId] = useState<string | null>(null);
     const [formData, setFormData] = useState<UserFormData>(initialFormData);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const usersPerPage = 10;
+
+    const filteredUsers = users.filter((user) => {
+        const term = searchTerm.trim().toLowerCase();
+        if (!term) return true;
+        const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+        return (
+            fullName.includes(term) ||
+            user.email.toLowerCase().includes(term) ||
+            user.username.toLowerCase().includes(term) ||
+            user.role.toLowerCase().includes(term) ||
+            user.phone.toLowerCase().includes(term)
+        );
+    });
+
+    const totalPages = Math.max(1, Math.ceil(filteredUsers.length / usersPerPage));
+    const paginatedUsers = filteredUsers.slice((currentPage - 1) * usersPerPage, currentPage * usersPerPage);
 
     useEffect(() => {
         loadUsers();
     }, []);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, users.length]);
 
     const loadUsers = async () => {
         try {
@@ -105,15 +59,19 @@ function Users() {
 
     const openAddModal = () => {
         setEditId(null);
-        setFormData(initialFormData);
+        setFormData(structuredClone(initialFormData));
         setModalOpen(true);
     };
 
-    const openEditModal = async (id: number) => {
+    const fillSampleData = () => {
+        setFormData(structuredClone(sampleUserData));
+    };
+
+    const openEditModal = async (id: string) => {
         try {
             setLoading(true);
             const user = await getUserById(id);
-            const { id: _, ...rest } = user;
+            const { _id, ...rest } = user;
             setEditId(id);
             setFormData(rest);
             setModalOpen(true);
@@ -127,7 +85,7 @@ function Users() {
     const closeModal = () => {
         setModalOpen(false);
         setEditId(null);
-        setFormData(initialFormData);
+        setFormData(structuredClone(initialFormData));
     };
 
     const handleChange = (
@@ -139,7 +97,7 @@ function Users() {
             const keys = name.split(".");
 
             setFormData((prev) => {
-                const updated = structuredClone(prev) as Record<string, unknown>;
+                const updated = structuredClone(prev) as unknown as Record<string, unknown>;
                 let current: Record<string, unknown> = updated;
 
                 for (let i = 0; i < keys.length - 1; i++) {
@@ -148,15 +106,15 @@ function Users() {
 
                 const lastKey = keys[keys.length - 1];
                 current[lastKey] =
-                    name.includes("age") ||
-                        name.includes("height") ||
-                        name.includes("weight") ||
-                        name.includes("lat") ||
-                        name.includes("lng")
+                    name === "age" ||
+                        name === "height" ||
+                        name === "weight" ||
+                        name.endsWith(".lat") ||
+                        name.endsWith(".lng")
                         ? Number(value)
                         : value;
 
-                return updated as UserFormData;
+                return updated as unknown as UserFormData;
             });
 
             return;
@@ -194,7 +152,7 @@ function Users() {
         }
     };
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this user?");
         if (!confirmDelete) return;
 
@@ -218,9 +176,18 @@ function Users() {
                     <p>Complete CRUD with modal form</p>
                 </div>
 
-                <button className="primary-btn" onClick={openAddModal}>
-                    Add User
-                </button>
+                <div className="topbar-actions">
+                    <input
+                        className="users-search-input"
+                        type="text"
+                        placeholder="Search by name, email, username, role, phone"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <button className="primary-btn" onClick={openAddModal}>
+                        Add User
+                    </button>
+                </div>
             </div>
 
             <div className="users-table-card">
@@ -244,10 +211,10 @@ function Users() {
                             </thead>
 
                             <tbody>
-                                {users.length > 0 ? (
-                                    users.map((user) => (
-                                        <tr key={user.id}>
-                                            <td>{user.id}</td>
+                                {paginatedUsers.length > 0 ? (
+                                    paginatedUsers.map((user, index) => (
+                                        <tr key={user._id}>
+                                            <td>{(currentPage - 1) * usersPerPage + index + 1}</td>
                                             <td>
                                                 <img
                                                     src={user.image}
@@ -265,13 +232,13 @@ function Users() {
                                                 <div className="action-buttons">
                                                     <button
                                                         className="edit-btn"
-                                                        onClick={() => openEditModal(user.id)}
+                                                        onClick={() => openEditModal(user._id)}
                                                     >
                                                         Edit
                                                     </button>
                                                     <button
                                                         className="delete-btn"
-                                                        onClick={() => handleDelete(user.id)}
+                                                        onClick={() => handleDelete(user._id)}
                                                     >
                                                         Delete
                                                     </button>
@@ -288,6 +255,30 @@ function Users() {
                                 )}
                             </tbody>
                         </table>
+                        <div className="pagination-row">
+                            <div className="pagination-info">
+                                Showing {(currentPage - 1) * usersPerPage + 1} - {Math.min(currentPage * usersPerPage, filteredUsers.length)} of {filteredUsers.length}
+                            </div>
+                            <div className="pagination-actions">
+                                <button
+                                    className="secondary-btn"
+                                    disabled={currentPage === 1}
+                                    onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                                >
+                                    Previous
+                                </button>
+                                <span>
+                                    Page {currentPage} of {totalPages}
+                                </span>
+                                <button
+                                    className="secondary-btn"
+                                    disabled={currentPage >= totalPages}
+                                    onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>
@@ -303,6 +294,18 @@ function Users() {
                         </div>
 
                         <form className="user-form" onSubmit={handleSubmit}>
+                            <div className="form-top-actions">
+                                {editId === null && (
+                                    <button
+                                        type="button"
+                                        className="secondary-btn"
+                                        onClick={fillSampleData}
+                                    >
+                                        Fill Sample Data
+                                    </button>
+                                )}
+                            </div>
+
                             <div className="form-grid">
                                 <input name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} />
                                 <input name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} />

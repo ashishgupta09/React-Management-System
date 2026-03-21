@@ -13,7 +13,7 @@ export const getUsers = async (): Promise<UserData[]> => {
     return response.json();
 };
 
-export const getUserById = async (id: number): Promise<UserData> => {
+export const getUserById = async (id: string): Promise<UserData> => {
     const response = await fetch(`${USER_API}/${id}`);
 
     if (!response.ok) {
@@ -40,7 +40,7 @@ export const addUser = async (data: UserFormData): Promise<UserData> => {
 };
 
 export const updateUser = async (
-    id: number,
+    id: string,
     data: UserFormData
 ): Promise<UserData> => {
     const response = await fetch(`${USER_API}/${id}`, {
@@ -58,7 +58,7 @@ export const updateUser = async (
     return response.json();
 };
 
-export const deleteUser = async (id: number): Promise<void> => {
+export const deleteUser = async (id: string): Promise<void> => {
     const response = await fetch(`${USER_API}/${id}`, {
         method: "DELETE",
     });

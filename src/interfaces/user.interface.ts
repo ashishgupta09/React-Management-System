@@ -39,8 +39,7 @@ export interface Crypto {
     network: string;
 }
 
-export interface UserData {
-    id: number;
+export interface UserFormData {
     firstName: string;
     lastName: string;
     maidenName: string;
@@ -70,4 +69,6 @@ export interface UserData {
     role: string;
 }
 
-export type UserFormData = Omit<UserData, "id">;
+export interface UserData extends UserFormData {
+    _id: string;
+}
