@@ -1,0 +1,254 @@
+.overview-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+}
+
+.overview-header h1 {
+    font-size: 28px;
+    color: #0f172a;
+    margin-bottom: 6px;
+    line-height: 1.2;
+}
+
+.overview-header p {
+    color: #64748b;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.overview-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(180px, 1fr));
+    gap: 18px;
+    width: 100%;
+}
+
+.stat-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    min-width: 0;
+}
+
+.stat-card h3 {
+    font-size: 15px;
+    color: #64748b;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.stat-card p {
+    font-size: 30px;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(320px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+.chart-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    min-width: 0;
+    overflow: hidden;
+}
+
+.chart-card h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: #0f172a;
+    line-height: 1.4;
+}
+
+.chart-box {
+    width: 100%;
+    height: 320px;
+}
+
+/* Large desktop */
+@media (min-width: 1440px) {
+    .overview-stats {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .charts-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .chart-box {
+        height: 360px;
+    }
+}
+
+/* Laptop */
+@media (max-width: 1200px) {
+    .overview-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .charts-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .chart-box {
+        height: 300px;
+    }
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+    .overview-page {
+        gap: 20px;
+    }
+
+    .overview-header h1 {
+        font-size: 26px;
+    }
+
+    .overview-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .charts-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .stat-card,
+    .chart-card {
+        padding: 20px;
+    }
+
+    .chart-box {
+        height: 300px;
+    }
+}
+
+/* Mobile landscape / large mobile */
+@media (max-width: 768px) {
+    .overview-page {
+        gap: 18px;
+    }
+
+    .overview-header h1 {
+        font-size: 24px;
+    }
+
+    .overview-header p {
+        font-size: 14px;
+    }
+
+    .overview-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+
+    .stat-card,
+    .chart-card {
+        padding: 18px;
+        border-radius: 16px;
+    }
+
+    .stat-card h3 {
+        font-size: 14px;
+    }
+
+    .stat-card p {
+        font-size: 24px;
+    }
+
+    .chart-card h2 {
+        font-size: 17px;
+        margin-bottom: 14px;
+    }
+
+    .chart-box {
+        height: 280px;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 576px) {
+    .overview-header h1 {
+        font-size: 22px;
+    }
+
+    .overview-header p {
+        font-size: 13px;
+    }
+
+    .overview-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card,
+    .chart-card {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .stat-card h3 {
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .stat-card p {
+        font-size: 22px;
+    }
+
+    .chart-card h2 {
+        font-size: 16px;
+    }
+
+    .chart-box {
+        height: 250px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 400px) {
+    .overview-page {
+        gap: 16px;
+    }
+
+    .overview-header h1 {
+        font-size: 20px;
+    }
+
+    .overview-header p {
+        font-size: 12px;
+    }
+
+    .stat-card,
+    .chart-card {
+        padding: 14px;
+    }
+
+    .stat-card p {
+        font-size: 20px;
+    }
+
+    .chart-card h2 {
+        font-size: 15px;
+    }
+
+    .chart-box {
+        height: 220px;
+    }
+}

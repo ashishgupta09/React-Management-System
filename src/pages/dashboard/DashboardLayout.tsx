@@ -8,8 +8,9 @@ import Reports from "./Reports";
 import Settings from "./Settings";
 import { Menu, LogOut } from "lucide-react";
 import "../../styles/dashboard.css";
+import TodoList from "./TodoList";
 
-type SectionType = "overview" | "users" | "reports" | "settings";
+type SectionType = "overview" | "users" | "reports" | "tasks" | "settings";
 
 function DashboardLayout() {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ function DashboardLayout() {
         overview: <Overview />,
         users: <Users />,
         reports: <Reports />,
+        tasks: <TodoList />,
         settings: <Settings />,
     };
 

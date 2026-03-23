@@ -8,7 +8,7 @@ import {
     PanelLeftOpen,
 } from "lucide-react";
 
-type SectionType = "overview" | "users" | "reports" | "settings";
+type SectionType = "overview" | "users" | "reports" | "tasks" | "settings";
 
 interface SidebarProps {
     activeSection: SectionType;
@@ -47,6 +47,11 @@ function Sidebar({
                 key: "settings",
                 label: "Settings",
                 icon: <Settings size={20} />,
+            },
+            {
+                key: "tasks",
+                label: "Tasks",
+                icon: <LayoutDashboard size={20} />,
             },
         ];
 
