@@ -9,13 +9,19 @@
 .sidebar {
   background: var(--sidebar-bg);
   color: var(--sidebar-text);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
   overflow: hidden;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme='dark'] .sidebar {
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar.open {
   width: 280px;
+  animation: slideInLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar.closed {
@@ -23,22 +29,27 @@
 }
 
 .sidebar-inner {
-  padding: 20px 14px;
+  padding: 24px 14px;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
   padding: 0 6px;
 }
 
 .sidebar-header h2 {
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--sidebar-text);
+  font-size: 24px;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .sidebar-toggle-btn {
@@ -47,33 +58,61 @@
   color: #fff;
   width: 40px;
   height: 40px;
-  border-radius: 10px;
+  border-radius: 12px;
   display: grid;
   place-items: center;
   cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-toggle-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+.sidebar-toggle-btn:active {
+  transform: translateY(0);
 }
 
 .menu-list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  flex: 1;
 }
 
 .menu-list li {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 14px;
-  border-radius: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  color: var(--text-primary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 0;
+  background: var(--gradient-primary);
+  transition: height 0.3s ease;
+  border-radius: 0 3px 3px 0;
 }
 
 .menu-list li:hover {
   background: var(--sidebar-hover);
-  color: var(--sidebar-text);
+  color: var(--text-primary);
+  transform: translateX(4px);
 }
 
 .menu-list li.active {
@@ -81,15 +120,20 @@
   color: #fff;
 }
 
+.menu-list li.active::before {
+  height: 100%;
+}
+
 .menu-icon {
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 22px;
+  font-size: 18px;
 }
 
 .menu-label {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
 }
 
@@ -98,11 +142,14 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+  background: var(--bg-primary);
 }
 
 .dashboard-header {
   height: 72px;
   background: var(--header-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
@@ -111,74 +158,103 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme='dark'] .dashboard-header {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.24);
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
 }
 
 .header-toggle-btn {
   border: none;
-  background: transparent;
+  background: var(--button-secondary);
   color: var(--button-primary);
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   display: grid;
   place-items: center;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
 }
 
 .header-toggle-btn:hover {
-  background: var(--bg-secondary);
+  background: var(--button-secondary-hover);
+  transform: scale(1.05);
+}
+
+.header-toggle-btn:active {
+  transform: scale(0.98);
 }
 
 .header-title {
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .logout-btn {
   border: none;
-  background: #ef4444;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
   color: #fff;
-  padding: 10px 16px;
-  border-radius: 10px;
+  padding: 10px 18px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 .logout-btn:hover {
-  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
 }
 
 .theme-toggle-btn {
   border: none;
-  background: transparent;
-  color: var(--text-primary);
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
+  background: var(--button-secondary);
+  color: var(--button-primary);
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   display: grid;
   place-items: center;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
 }
 
 .theme-toggle-btn:hover {
-  background: var(--bg-secondary);
+  background: var(--button-secondary-hover);
+  transform: rotate(20deg) scale(1.05);
+}
+
+.theme-toggle-btn:active {
+  transform: rotate(20deg) scale(0.98);
 }
 
 .dashboard-content {
-  padding: 24px;
+  padding: 28px;
+  flex: 1;
+  overflow-y: auto;
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .overlay {
@@ -214,6 +290,7 @@
 
   .sidebar.open {
     transform: translateX(0);
+    animation: slideInLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .sidebar.closed {
@@ -229,7 +306,7 @@
     z-index: 999;
     opacity: 0;
     visibility: hidden;
-    transition: 0.3s ease;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .show-overlay {
