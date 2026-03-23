@@ -15,12 +15,12 @@
 
 .todo-header h1 {
     font-size: 28px;
-    color: #0f172a;
+    color: var(--text-primary);
     margin-bottom: 6px;
 }
 
 .todo-header p {
-    color: #64748b;
+    color: var(--text-secondary);
     font-size: 15px;
 }
 
@@ -44,7 +44,7 @@
 
 .secondary-btn {
     background: #cbd5e1;
-    color: #0f172a;
+    color: var(--text-primary);
     padding: 12px 18px;
     border-radius: 10px;
     font-weight: 600;
@@ -65,7 +65,7 @@
 }
 
 .toggle-btn {
-    background: #0f172a;
+    background: var(--text-primary);
     color: #fff;
     padding: 10px 14px;
     border-radius: 10px;
@@ -83,11 +83,12 @@
 .todo-form select {
     width: 100%;
     padding: 12px 14px;
-    border: 1px solid #dbe2ea;
+    border: 1px solid var(--border-color);
     border-radius: 12px;
     outline: none;
     font-size: 14px;
-    background: #fff;
+    background: var(--card-bg);
+    color: var(--text-primary);
 }
 
 .todo-stats {
@@ -97,22 +98,22 @@
 }
 
 .todo-stat-card {
-    background: #fff;
+    background: var(--card-bg);
     border-radius: 18px;
     padding: 20px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow);
 }
 
 .todo-stat-card h3 {
     font-size: 15px;
-    color: #64748b;
+    color: var(--text-secondary);
     margin-bottom: 10px;
 }
 
 .todo-stat-card p {
     font-size: 28px;
     font-weight: 700;
-    color: #0f172a;
+    color: var(--text-primary);
 }
 
 .todo-bulk-actions {
@@ -122,10 +123,10 @@
 }
 
 .todo-table-card {
-    background: #fff;
+    background: var(--card-bg);
     border-radius: 18px;
     padding: 20px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow);
 }
 
 .todo-table-wrapper {
@@ -142,8 +143,9 @@
 .todo-table td {
     padding: 14px 12px;
     text-align: left;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border-color);
     font-size: 14px;
+    color: var(--text-primary);
 }
 
 .action-buttons {
@@ -189,7 +191,7 @@
 
 .empty-text {
     text-align: center;
-    color: #94a3b8;
+    color: var(--text-tertiary);
     padding: 20px;
 }
 
@@ -215,7 +217,7 @@
 .todo-modal {
     width: 100%;
     max-width: 520px;
-    background: #fff;
+    background: var(--card-bg);
     border-radius: 20px;
     padding: 24px;
 }
@@ -230,7 +232,7 @@
 .close-btn {
     background: transparent;
     font-size: 28px;
-    color: #334155;
+    color: var(--text-secondary);
 }
 
 .todo-form {

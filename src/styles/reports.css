@@ -15,12 +15,12 @@
 
 .reports-header h1 {
     font-size: 28px;
-    color: #0f172a;
+    color: var(--text-primary);
     margin-bottom: 6px;
 }
 
 .reports-header p {
-    color: #64748b;
+    color: var(--text-secondary);
     font-size: 15px;
 }
 
@@ -44,11 +44,12 @@
 .reports-filters select {
     width: 100%;
     padding: 12px 14px;
-    border: 1px solid #dbe2ea;
+    border: 1px solid var(--border-color);
     border-radius: 12px;
     outline: none;
     font-size: 14px;
-    background: #fff;
+    background: var(--card-bg);
+    color: var(--text-primary);
 }
 
 .reports-filters input:focus,
@@ -63,29 +64,29 @@
 }
 
 .report-card {
-    background: #fff;
+    background: var(--card-bg);
     border-radius: 18px;
     padding: 20px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow);
 }
 
 .report-card h3 {
     font-size: 15px;
-    color: #64748b;
+    color: var(--text-secondary);
     margin-bottom: 10px;
 }
 
 .report-card p {
     font-size: 28px;
     font-weight: 700;
-    color: #0f172a;
+    color: var(--text-primary);
 }
 
 .reports-table-card {
-    background: #fff;
+    background: var(--card-bg);
     border-radius: 18px;
     padding: 20px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow);
 }
 
 .reports-table-wrapper {

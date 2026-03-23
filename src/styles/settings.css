@@ -7,12 +7,12 @@
 
 .settings-header h1 {
     font-size: 28px;
-    color: #0f172a;
+    color: var(--text-primary);
     margin-bottom: 6px;
 }
 
 .settings-header p {
-    color: #64748b;
+    color: var(--text-secondary);
     font-size: 15px;
 }
 
@@ -23,15 +23,15 @@
 }
 
 .settings-card {
-    background: #ffffff;
+    background: var(--card-bg);
     border-radius: 18px;
     padding: 22px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow);
 }
 
 .settings-card h2 {
     font-size: 20px;
-    color: #0f172a;
+    color: var(--text-primary);
     margin-bottom: 18px;
 }
 
@@ -50,17 +50,18 @@
 .form-group label {
     font-size: 14px;
     font-weight: 500;
-    color: #334155;
+    color: var(--text-secondary);
 }
 
 .settings-grid input {
     width: 100%;
     padding: 12px 14px;
-    border: 1px solid #dbe2ea;
+    border: 1px solid var(--border-color);
     border-radius: 12px;
     outline: none;
     font-size: 14px;
-    background: #fff;
+    background: var(--card-bg);
+    color: var(--text-primary);
 }
 
 .settings-grid input:focus {

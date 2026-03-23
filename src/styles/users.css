@@ -14,11 +14,11 @@
 
 .users-topbar h1 {
     font-size: 28px;
-    color: #0f172a;
+    color: var(--text-primary);
 }
 
 .users-topbar p {
-    color: #64748b;
+    color: var(--text-secondary);
     margin-top: 4px;
 }
 
@@ -41,17 +41,17 @@
 
 .secondary-btn {
     background: #cbd5e1;
-    color: #0f172a;
+    color: var(--text-primary);
     padding: 12px 18px;
     border-radius: 10px;
     font-weight: 600;
 }
 
 .users-table-card {
-    background: #fff;
+    background: var(--card-bg);
     border-radius: 18px;
     padding: 20px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow);
 }
 
 .users-table-wrapper {
@@ -68,13 +68,14 @@
 .users-table td {
     text-align: left;
     padding: 14px 12px;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border-color);
     font-size: 14px;
+    color: var(--text-primary);
 }
 
 .users-table th {
-    background: #f8fafc;
-    color: #334155;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
 }
 
 .user-avatar {

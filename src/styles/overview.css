@@ -7,13 +7,13 @@
 
 .overview-header h1 {
     font-size: 28px;
-    color: #0f172a;
+    color: var(--text-primary);
     margin-bottom: 6px;
     line-height: 1.2;
 }
 
 .overview-header p {
-    color: #64748b;
+    color: var(--text-secondary);
     font-size: 15px;
     line-height: 1.5;
 }
@@ -26,16 +26,16 @@
 }
 
 .stat-card {
-    background: #ffffff;
+    background: var(--card-bg);
     border-radius: 18px;
     padding: 22px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow);
     min-width: 0;
 }
 
 .stat-card h3 {
     font-size: 15px;
-    color: #64748b;
+    color: var(--text-secondary);
     margin-bottom: 10px;
     line-height: 1.4;
 }
@@ -43,7 +43,7 @@
 .stat-card p {
     font-size: 30px;
     font-weight: 700;
-    color: #0f172a;
+    color: var(--text-primary);
     line-height: 1.2;
     word-break: break-word;
 }
@@ -56,10 +56,10 @@
 }
 
 .chart-card {
-    background: #ffffff;
+    background: var(--card-bg);
     border-radius: 18px;
     padding: 22px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow);
     min-width: 0;
     overflow: hidden;
 }
@@ -67,7 +67,7 @@
 .chart-card h2 {
     font-size: 18px;
     margin-bottom: 16px;
-    color: #0f172a;
+    color: var(--text-primary);
     line-height: 1.4;
 }
 
