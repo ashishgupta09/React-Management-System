@@ -8,7 +8,9 @@ import {
     getTodosByUserId,
     updateTodo,
 } from "../../services/todoService";
-import type{ Todo, TodoPriority } from "../../interfaces/todo.interface";
+import { getUsers } from "../../services/userService";
+import type { UserData } from "../../interfaces/user.interface";
+import type { Todo, TodoPriority } from "../../interfaces/todo.interface";
 import "../../styles/todo.css";
 
 type TodoFormData = {
@@ -24,10 +26,13 @@ const initialFormData: TodoFormData = {
 };
 
 function TodoList() {
+    const [users, setUsers] = useState<UserData[]>([]);
+    const [selectedUserId, setSelectedUserId] = useState("");
     const [todos, setTodos] = useState<Todo[]>([]);
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [formData, setFormData] = useState<TodoFormData>(initialFormData);
     const [loading, setLoading] = useState(false);
+    const [usersLoading, setUsersLoading] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [editId, setEditId] = useState<string | null>(null);
 
@@ -38,13 +43,37 @@ function TodoList() {
     const [limit] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
 
-    const userId = "";
+    useEffect(() => {
+        loadUsers();
+    }, []);
 
     useEffect(() => {
-        loadTodos();
-    }, [page, priorityFilter, completedFilter, search]);
+        if (selectedUserId) {
+            loadTodos(selectedUserId);
+        } else {
+            setTodos([]);
+            setTotalPages(1);
+            setSelectedIds([]);
+        }
+    }, [selectedUserId, page, priorityFilter, completedFilter, search]);
 
-    const loadTodos = async () => {
+    const loadUsers = async () => {
+        try {
+            setUsersLoading(true);
+            const data = await getUsers();
+            setUsers(data);
+
+            if (data.length > 0) {
+                setSelectedUserId(data[0]._id);
+            }
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : "Failed to load users");
+        } finally {
+            setUsersLoading(false);
+        }
+    };
+
+    const loadTodos = async (userId: string) => {
         try {
             setLoading(true);
 
@@ -73,6 +102,11 @@ function TodoList() {
     };
 
     const openAddModal = () => {
+        if (!selectedUserId) {
+            toast.error("Please select a user first");
+            return;
+        }
+
         setEditId(null);
         setFormData(initialFormData);
         setModalOpen(true);
@@ -111,6 +145,11 @@ function TodoList() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        if (!selectedUserId) {
+            toast.error("Please select a user");
+            return;
+        }
+
         if (!formData.todo.trim()) {
             toast.error("Please enter todo text");
             return;
@@ -128,7 +167,7 @@ function TodoList() {
                 toast.success("Todo updated successfully");
             } else {
                 await createTodo({
-                    userId,
+                    userId: selectedUserId,
                     todo: formData.todo,
                     priority: formData.priority,
                     completed: formData.completed,
@@ -137,7 +176,7 @@ function TodoList() {
             }
 
             closeModal();
-            await loadTodos();
+            await loadTodos(selectedUserId);
         } catch (error: unknown) {
             toast.error(error instanceof Error ? error.message : "Something went wrong");
         } finally {
@@ -147,13 +186,13 @@ function TodoList() {
 
     const handleDelete = async (id: string) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this todo?");
-        if (!confirmDelete) return;
+        if (!confirmDelete || !selectedUserId) return;
 
         try {
             setLoading(true);
             await deleteTodo(id);
             toast.success("Todo deleted successfully");
-            await loadTodos();
+            await loadTodos(selectedUserId);
         } catch (error: unknown) {
             toast.error(error instanceof Error ? error.message : "Failed to delete todo");
         } finally {
@@ -162,13 +201,15 @@ function TodoList() {
     };
 
     const handleToggleCompleted = async (todo: Todo) => {
+        if (!selectedUserId) return;
+
         try {
             setLoading(true);
             await updateTodo(todo._id, {
                 completed: !todo.completed,
             });
             toast.success("Todo status updated");
-            await loadTodos();
+            await loadTodos(selectedUserId);
         } catch (error: unknown) {
             toast.error(error instanceof Error ? error.message : "Failed to update status");
         } finally {
@@ -192,6 +233,11 @@ function TodoList() {
     };
 
     const handleBulkComplete = async (completed: boolean) => {
+        if (!selectedUserId) {
+            toast.error("Please select a user");
+            return;
+        }
+
         if (selectedIds.length === 0) {
             toast.error("Please select at least one todo");
             return;
@@ -199,12 +245,16 @@ function TodoList() {
 
         try {
             setLoading(true);
+
             await bulkUpdateTodoStatus({
                 ids: selectedIds,
-                completed,
+                updates: {
+                    completed,
+                },
             });
+
             toast.success("Bulk status updated successfully");
-            await loadTodos();
+            await loadTodos(selectedUserId);
         } catch (error: unknown) {
             toast.error(error instanceof Error ? error.message : "Bulk update failed");
         } finally {
@@ -213,6 +263,11 @@ function TodoList() {
     };
 
     const handleBulkDelete = async () => {
+        if (!selectedUserId) {
+            toast.error("Please select a user");
+            return;
+        }
+
         if (selectedIds.length === 0) {
             toast.error("Please select at least one todo");
             return;
@@ -225,7 +280,7 @@ function TodoList() {
             setLoading(true);
             await bulkDeleteTodos({ ids: selectedIds });
             toast.success("Selected todos deleted successfully");
-            await loadTodos();
+            await loadTodos(selectedUserId);
         } catch (error: unknown) {
             toast.error(error instanceof Error ? error.message : "Bulk delete failed");
         } finally {
@@ -251,12 +306,33 @@ function TodoList() {
             <div className="todo-header">
                 <div>
                     <h1>Todo List</h1>
-                    <p>Manage your user-based todo items</p>
+                    <p>Manage user-based todo items using selected user _id</p>
                 </div>
 
                 <button className="primary-btn" onClick={openAddModal}>
                     Add Todo
                 </button>
+            </div>
+
+            <div className="todo-user-select-card">
+                <div className="todo-user-select">
+                    <label>Select User</label>
+                    <select
+                        value={selectedUserId}
+                        onChange={(e) => {
+                            setPage(1);
+                            setSelectedUserId(e.target.value);
+                        }}
+                        disabled={usersLoading}
+                    >
+                        <option value="">Select user</option>
+                        {users.map((user) => (
+                            <option key={user._id} value={user._id}>
+                                {user.firstName} {user.lastName} ({user.email})
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
 
             <div className="todo-filters">
@@ -268,6 +344,7 @@ function TodoList() {
                         setPage(1);
                         setSearch(e.target.value);
                     }}
+                    disabled={!selectedUserId}
                 />
 
                 <select
@@ -276,6 +353,7 @@ function TodoList() {
                         setPage(1);
                         setPriorityFilter(e.target.value as "" | TodoPriority);
                     }}
+                    disabled={!selectedUserId}
                 >
                     <option value="">All Priority</option>
                     <option value="low">Low</option>
@@ -289,6 +367,7 @@ function TodoList() {
                         setPage(1);
                         setCompletedFilter(e.target.value as "" | "true" | "false");
                     }}
+                    disabled={!selectedUserId}
                 >
                     <option value="">All Status</option>
                     <option value="true">Completed</option>
@@ -328,7 +407,9 @@ function TodoList() {
             </div>
 
             <div className="todo-table-card">
-                {loading ? (
+                {!selectedUserId ? (
+                    <p>Please select a user to view todos.</p>
+                ) : loading ? (
                     <p>Loading todos...</p>
                 ) : (
                     <div className="todo-table-wrapper">
@@ -368,7 +449,10 @@ function TodoList() {
                                                 </span>
                                             </td>
                                             <td>
-                                                <span className={`badge ${item.completed ? "status-completed" : "status-pending"}`}>
+                                                <span
+                                                    className={`badge ${item.completed ? "status-completed" : "status-pending"
+                                                        }`}
+                                                >
                                                     {item.completed ? "Completed" : "Pending"}
                                                 </span>
                                             </td>
@@ -417,7 +501,7 @@ function TodoList() {
             <div className="pagination">
                 <button
                     className="secondary-btn"
-                    disabled={page === 1}
+                    disabled={page === 1 || !selectedUserId}
                     onClick={() => setPage((prev) => prev - 1)}
                 >
                     Previous
@@ -429,7 +513,7 @@ function TodoList() {
 
                 <button
                     className="secondary-btn"
-                    disabled={page === totalPages}
+                    disabled={page === totalPages || !selectedUserId}
                     onClick={() => setPage((prev) => prev + 1)}
                 >
                     Next

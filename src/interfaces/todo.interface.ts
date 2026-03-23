@@ -43,7 +43,12 @@ export interface TodoListResponse {
 
 export interface BulkUpdateTodoStatusPayload {
   ids: string[];
-  completed: boolean;
+  updates: UpdateTodoPayload;
+}
+
+export interface UpdateTodoPayload {
+  completed?: boolean;
+  priority?: "low" | "medium" | "high";
 }
 
 export interface BulkDeleteTodosPayload {

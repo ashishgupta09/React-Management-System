@@ -1,5 +1,5 @@
 import { BASE_URL } from "./api";
-import type{
+import type {
   BulkDeleteTodosPayload,
   BulkUpdateTodoStatusPayload,
   CreateTodoPayload,
@@ -50,7 +50,11 @@ export const getTodosByUserId = async (
     sortBy: params.sortBy ?? "createdAt",
     order: params.order ?? "desc",
     completed:
-      params.completed === "" ? "" : params.completed === undefined ? "" : String(params.completed),
+      params.completed === ""
+        ? ""
+        : params.completed === undefined
+        ? ""
+        : String(params.completed),
     priority: params.priority ?? "",
     search: params.search ?? "",
   });
