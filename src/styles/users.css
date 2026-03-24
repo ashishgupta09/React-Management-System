@@ -120,6 +120,13 @@
     object-fit: cover;
     border: 2px solid var(--gradient-primary);
     background: var(--bg-secondary);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.user-avatar:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
 }
 
 .action-buttons {

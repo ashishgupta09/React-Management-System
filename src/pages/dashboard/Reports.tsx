@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { getUsers } from "../../services/userService";
 import type { UserData } from "../../interfaces/user.interface";
+import { SkeletonStatCard, SkeletonTable } from "../../components/Skeleton";
 import "../../styles/reports.css";
 
 function Reports() {
@@ -150,30 +151,57 @@ function Reports() {
             </div>
 
             <div className="reports-stats">
-                <div className="report-card">
-                    <h3>Total Users</h3>
-                    <p>{totalUsers}</p>
-                </div>
+                {loading ? (
+                    <>
+                        <SkeletonStatCard />
+                        <SkeletonStatCard />
+                        <SkeletonStatCard />
+                        <SkeletonStatCard />
+                    </>
+                ) : (
+                    <>
+                        <div className="report-card">
+                            <h3>Total Users</h3>
+                            <p>{totalUsers}</p>
+                        </div>
 
-                <div className="report-card">
-                    <h3>Total Admins</h3>
-                    <p>{totalAdmins}</p>
-                </div>
+                        <div className="report-card">
+                            <h3>Total Admins</h3>
+                            <p>{totalAdmins}</p>
+                        </div>
 
-                <div className="report-card">
-                    <h3>Male Users</h3>
-                    <p>{totalMale}</p>
-                </div>
+                        <div className="report-card">
+                            <h3>Male Users</h3>
+                            <p>{totalMale}</p>
+                        </div>
 
-                <div className="report-card">
-                    <h3>Female Users</h3>
-                    <p>{totalFemale}</p>
-                </div>
+                        <div className="report-card">
+                            <h3>Female Users</h3>
+                            <p>{totalFemale}</p>
+                        </div>
+                    </>
+                )}
             </div>
 
             <div className="reports-table-card">
                 {loading ? (
-                    <p>Loading reports...</p>
+                    <table className="reports-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Username</th>
+                                <th>Gender</th>
+                                <th>Role</th>
+                                <th>Phone</th>
+                                <th>University</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <SkeletonTable rows={8} columns={8} />
+                        </tbody>
+                    </table>
                 ) : (
                     <div className="reports-table-wrapper">
                         <table className="reports-table">

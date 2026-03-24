@@ -3,10 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { loginUser } from "../services/authService";
 import type { LoginRequest } from "../interfaces/auth.interface";
+import { useAuth } from "../context/AuthContext";
 import "../styles/Auth.css";
 
 function Login() {
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const [formData, setFormData] = useState<LoginRequest>({
         email: "",
@@ -29,14 +31,17 @@ function Login() {
 
         try {
             setLoading(true);
+
             const result = await loginUser(formData);
 
-            if (result.token) {
-                localStorage.setItem("token", result.token);
+            if (!result.token) {
+                throw new Error("Token not received");
             }
 
+            login(result.token);
+
             toast.success(result.message || "Login successful");
-            navigate("/home");
+            navigate("/home", { replace: true });
         } catch (error: unknown) {
             if (error instanceof Error) {
                 toast.error(error.message);
@@ -61,6 +66,7 @@ function Login() {
                         placeholder="Enter your email"
                         value={formData.email}
                         onChange={handleChange}
+                        required
                     />
 
                     <input
@@ -69,6 +75,7 @@ function Login() {
                         placeholder="Enter your password"
                         value={formData.password}
                         onChange={handleChange}
+                        required
                     />
 
                     <button type="submit" disabled={loading}>

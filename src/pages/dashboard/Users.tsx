@@ -9,6 +9,8 @@ import {
 } from "../../services/userService";
 import type { UserData, UserFormData } from "../../interfaces/user.interface";
 import { initialFormData, sampleUserData } from "../../constants/user.constants";
+import ProfileDrawer from "../../components/ProfileDrawer";
+import { SkeletonTable } from "../../components/Skeleton";
 import "../../styles/users.css";
 
 function Users() {
@@ -19,6 +21,8 @@ function Users() {
     const [formData, setFormData] = useState<UserFormData>(initialFormData);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
+    const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
+    const [selectedUserForProfile, setSelectedUserForProfile] = useState<UserData | null>(null);
     const usersPerPage = 10;
 
     const filteredUsers = users.filter((user) => {
@@ -168,6 +172,26 @@ function Users() {
         }
     };
 
+    const openProfileDrawer = (user: UserData) => {
+        setSelectedUserForProfile(user);
+        setProfileDrawerOpen(true);
+    };
+
+    const closeProfileDrawer = () => {
+        setProfileDrawerOpen(false);
+        setSelectedUserForProfile(null);
+    };
+
+    const handleProfileUpdate = (updatedUser: UserData) => {
+        setUsers((prevUsers) =>
+            prevUsers.map((user) =>
+                user._id === updatedUser._id ? updatedUser : user
+            )
+        );
+        setSelectedUserForProfile(updatedUser);
+        toast.success("Profile updated successfully");
+    };
+
     return (
         <div className="users-page">
             <div className="users-topbar">
@@ -192,7 +216,24 @@ function Users() {
 
             <div className="users-table-card">
                 {loading ? (
-                    <p>Loading...</p>
+                    <table className="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Username</th>
+                                <th>Gender</th>
+                                <th>Role</th>
+                                <th>Phone</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <SkeletonTable rows={8} columns={9} />
+                        </tbody>
+                    </table>
                 ) : (
                     <div className="users-table-wrapper">
                         <table className="users-table">
@@ -220,6 +261,9 @@ function Users() {
                                                     src={user.image}
                                                     alt={user.firstName}
                                                     className="user-avatar"
+                                                    onClick={() => openProfileDrawer(user)}
+                                                    style={{ cursor: "pointer" }}
+                                                    title="Click to view profile"
                                                 />
                                             </td>
                                             <td>{`${user.firstName} ${user.lastName}`}</td>
@@ -230,6 +274,13 @@ function Users() {
                                             <td>{user.phone}</td>
                                             <td>
                                                 <div className="action-buttons">
+                                                    <button
+                                                        className="primary-btn"
+                                                        onClick={() => openProfileDrawer(user)}
+                                                        style={{ padding: "8px 14px", fontSize: "12px" }}
+                                                    >
+                                                        View Details
+                                                    </button>
                                                     <button
                                                         className="edit-btn"
                                                         onClick={() => openEditModal(user._id)}
@@ -372,6 +423,14 @@ function Users() {
                     </div>
                 </div>
             )}
+
+            {/* Profile Drawer */}
+            <ProfileDrawer
+                user={selectedUserForProfile}
+                isOpen={profileDrawerOpen}
+                onClose={closeProfileDrawer}
+                onUpdate={handleProfileUpdate}
+            />
         </div>
     );
 }

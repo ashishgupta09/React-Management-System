@@ -11,6 +11,7 @@ import {
 import { getUsers } from "../../services/userService";
 import type { UserData } from "../../interfaces/user.interface";
 import type { Todo, TodoPriority } from "../../interfaces/todo.interface";
+import { SkeletonStatCard, SkeletonTable } from "../../components/Skeleton";
 import "../../styles/todo.css";
 
 type TodoFormData = {
@@ -376,22 +377,40 @@ function TodoList() {
             </div>
 
             <div className="todo-stats">
-                <div className="todo-stat-card">
-                    <h3>Total</h3>
-                    <p>{stats.total}</p>
-                </div>
-                <div className="todo-stat-card">
-                    <h3>Completed</h3>
-                    <p>{stats.completed}</p>
-                </div>
-                <div className="todo-stat-card">
-                    <h3>Pending</h3>
-                    <p>{stats.pending}</p>
-                </div>
-                <div className="todo-stat-card">
-                    <h3>High Priority</h3>
-                    <p>{stats.highPriority}</p>
-                </div>
+                {!selectedUserId ? (
+                    <>
+                        <SkeletonStatCard />
+                        <SkeletonStatCard />
+                        <SkeletonStatCard />
+                        <SkeletonStatCard />
+                    </>
+                ) : loading ? (
+                    <>
+                        <SkeletonStatCard />
+                        <SkeletonStatCard />
+                        <SkeletonStatCard />
+                        <SkeletonStatCard />
+                    </>
+                ) : (
+                    <>
+                        <div className="todo-stat-card">
+                            <h3>Total</h3>
+                            <p>{stats.total}</p>
+                        </div>
+                        <div className="todo-stat-card">
+                            <h3>Completed</h3>
+                            <p>{stats.completed}</p>
+                        </div>
+                        <div className="todo-stat-card">
+                            <h3>Pending</h3>
+                            <p>{stats.pending}</p>
+                        </div>
+                        <div className="todo-stat-card">
+                            <h3>High Priority</h3>
+                            <p>{stats.highPriority}</p>
+                        </div>
+                    </>
+                )}
             </div>
 
             <div className="todo-bulk-actions">
@@ -410,7 +429,23 @@ function TodoList() {
                 {!selectedUserId ? (
                     <p>Please select a user to view todos.</p>
                 ) : loading ? (
-                    <p>Loading todos...</p>
+                    <table className="todo-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" disabled />
+                                </th>
+                                <th>Todo</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <SkeletonTable rows={8} columns={6} />
+                        </tbody>
+                    </table>
                 ) : (
                     <div className="todo-table-wrapper">
                         <table className="todo-table">

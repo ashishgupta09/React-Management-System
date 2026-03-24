@@ -16,6 +16,7 @@ import {
 } from "recharts";
 import { getUsers } from "../../services/userService";
 import type { UserFormData } from "../../interfaces/user.interface";
+import { SkeletonStatCard, SkeletonChartCard } from "../../components/Skeleton";
 import "../../styles/overview.css";
 
 function Overview() {
@@ -105,114 +106,127 @@ function Overview() {
                 <p>Analytics and insights from user data</p>
             </div>
 
-            <div className="overview-stats">
-                <div className="stat-card">
-                    <h3>Total Users</h3>
-                    <p>{users.length}</p>
-                </div>
-
-                <div className="stat-card">
-                    <h3>Total Roles</h3>
-                    <p>{roleChartData.length}</p>
-                </div>
-
-                <div className="stat-card">
-                    <h3>Total Genders</h3>
-                    <p>{genderChartData.length}</p>
-                </div>
-
-                <div className="stat-card">
-                    <h3>Total Blood Groups</h3>
-                    <p>{bloodGroupChartData.length}</p>
-                </div>
-            </div>
-
             {loading ? (
-                <div className="chart-card">
-                    <p>Loading charts...</p>
+                <div className="skeleton-loading-container">
+                    <div className="skeleton-loading-stats">
+                        <SkeletonStatCard />
+                        <SkeletonStatCard />
+                        <SkeletonStatCard />
+                        <SkeletonStatCard />
+                    </div>
+                    <div className="charts-grid">
+                        <SkeletonChartCard />
+                        <SkeletonChartCard />
+                        <SkeletonChartCard />
+                        <SkeletonChartCard />
+                    </div>
                 </div>
             ) : (
-                <div className="charts-grid">
-                    <div className="chart-card">
-                        <h2>Users by Role</h2>
-                        <div className="chart-box">
-                            <ResponsiveContainer width="100%" height={320}>
-                                <BarChart data={roleChartData}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Legend />
-                                    <Bar dataKey="value" radius={[8, 8, 0, 0]} />
-                                </BarChart>
-                            </ResponsiveContainer>
+                <>
+                    <div className="overview-stats">
+                        <div className="stat-card">
+                            <h3>Total Users</h3>
+                            <p>{users.length}</p>
+                        </div>
+
+                        <div className="stat-card">
+                            <h3>Total Roles</h3>
+                            <p>{roleChartData.length}</p>
+                        </div>
+
+                        <div className="stat-card">
+                            <h3>Total Genders</h3>
+                            <p>{genderChartData.length}</p>
+                        </div>
+
+                        <div className="stat-card">
+                            <h3>Total Blood Groups</h3>
+                            <p>{bloodGroupChartData.length}</p>
                         </div>
                     </div>
 
-                    <div className="chart-card">
-                        <h2>Users by Gender</h2>
-                        <div className="chart-box">
-                            <ResponsiveContainer width="100%" height={320}>
-                                <PieChart>
-                                    <Pie
-                                        data={genderChartData}
-                                        dataKey="value"
-                                        nameKey="name"
-                                        outerRadius={100}
-                                        label
-                                    >
-                                        {genderChartData.map((entry, index) => (
-                                            <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip />
-                                    <Legend />
-                                </PieChart>
-                            </ResponsiveContainer>
+                    <div className="charts-grid">
+                        <div className="chart-card">
+                            <h2>Users by Role</h2>
+                            <div className="chart-box">
+                                <ResponsiveContainer width="100%" height={320}>
+                                    <BarChart data={roleChartData}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="name" />
+                                        <YAxis />
+                                        <Tooltip />
+                                        <Legend />
+                                        <Bar dataKey="value" radius={[8, 8, 0, 0]} />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="chart-card">
-                        <h2>Users by Blood Group</h2>
-                        <div className="chart-box">
-                            <ResponsiveContainer width="100%" height={320}>
-                                <PieChart>
-                                    <Pie
-                                        data={bloodGroupChartData}
-                                        dataKey="value"
-                                        nameKey="name"
-                                        innerRadius={60}
-                                        outerRadius={100}
-                                        paddingAngle={4}
-                                        label
-                                    >
-                                        {bloodGroupChartData.map((entry, index) => (
-                                            <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip />
-                                    <Legend />
-                                </PieChart>
-                            </ResponsiveContainer>
+                        <div className="chart-card">
+                            <h2>Users by Gender</h2>
+                            <div className="chart-box">
+                                <ResponsiveContainer width="100%" height={320}>
+                                    <PieChart>
+                                        <Pie
+                                            data={genderChartData}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            outerRadius={100}
+                                            label
+                                        >
+                                            {genderChartData.map((entry, index) => (
+                                                <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip />
+                                        <Legend />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="chart-card">
-                        <h2>Users by Month</h2>
-                        <div className="chart-box">
-                            <ResponsiveContainer width="100%" height={320}>
-                                <LineChart data={monthlyChartData}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Legend />
-                                    <Line type="monotone" dataKey="value" strokeWidth={3} />
-                                </LineChart>
-                            </ResponsiveContainer>
+                        <div className="chart-card">
+                            <h2>Users by Blood Group</h2>
+                            <div className="chart-box">
+                                <ResponsiveContainer width="100%" height={320}>
+                                    <PieChart>
+                                        <Pie
+                                            data={bloodGroupChartData}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            innerRadius={60}
+                                            outerRadius={100}
+                                            paddingAngle={4}
+                                            label
+                                        >
+                                            {bloodGroupChartData.map((entry, index) => (
+                                                <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip />
+                                        <Legend />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+
+                        <div className="chart-card">
+                            <h2>Users by Month</h2>
+                            <div className="chart-box">
+                                <ResponsiveContainer width="100%" height={320}>
+                                    <LineChart data={monthlyChartData}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="name" />
+                                        <YAxis />
+                                        <Tooltip />
+                                        <Legend />
+                                        <Line type="monotone" dataKey="value" strokeWidth={3} />
+                                    </LineChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </>
             )}
         </div>
     );

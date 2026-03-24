@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
     LayoutDashboard,
     Users,
@@ -6,7 +7,9 @@ import {
     Settings,
     PanelLeftClose,
     PanelLeftOpen,
+    CheckSquare,
 } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 
 type SectionType = "overview" | "users" | "reports" | "tasks" | "settings";
 
@@ -23,6 +26,9 @@ function Sidebar({
     isOpen,
     setIsOpen,
 }: SidebarProps) {
+    const navigate = useNavigate();
+    const { logout } = useAuth();
+
     const menuItems: {
         key: SectionType;
         label: string;
@@ -44,31 +50,41 @@ function Sidebar({
                 icon: <FileBarChart2 size={20} />,
             },
             {
+                key: "tasks",
+                label: "Tasks",
+                icon: <CheckSquare size={20} />,
+            },
+            {
                 key: "settings",
                 label: "Settings",
                 icon: <Settings size={20} />,
-            },
-            {
-                key: "tasks",
-                label: "Tasks",
-                icon: <LayoutDashboard size={20} />,
             },
         ];
 
     const handleMenuClick = (section: SectionType) => {
         setActiveSection(section);
+        navigate(`/home/${section}`);
 
         if (window.innerWidth <= 768) {
             setIsOpen(false);
         }
     };
 
+    // const handleLogout = () => {
+    //     logout();
+    //     navigate("/login", { replace: true });
+    // };
+
     return (
         <div className="sidebar-inner">
             <div className="sidebar-header">
-                {isOpen && <h2>My Panel</h2>}
+                {isOpen && <h2>AdminSphere</h2>}
 
-                <button className="sidebar-toggle-btn" onClick={() => setIsOpen(!isOpen)}>
+                <button
+                    type="button"
+                    className="sidebar-toggle-btn"
+                    onClick={() => setIsOpen(!isOpen)}
+                >
                     {isOpen ? <PanelLeftClose size={20} /> : <PanelLeftOpen size={20} />}
                 </button>
             </div>
@@ -85,8 +101,14 @@ function Sidebar({
                     </li>
                 ))}
             </ul>
+            {/* 
+            <div className="sidebar-footer">
+                <button type="button" className="logout-btn" onClick={handleLogout}>
+                    {isOpen ? "Logout" : "⎋"}
+                </button>
+            </div> */}
         </div>
-    )
+    );
 }
 
 export default Sidebar;

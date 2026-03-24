@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getUserById, updateUser } from "../../services/userService";
 import type { UserData, UserFormData } from "../../interfaces/user.interface";
+import { SkeletonFormSection } from "../../components/Skeleton";
 import "../../styles/settings.css";
 
 type FieldConfig = {
@@ -242,18 +243,27 @@ function Settings() {
                 <p>Manage your profile and account information</p>
             </div>
 
-            <form className="settings-form" onSubmit={handleSubmit}>
-                {renderFields("Profile Information", profileFields)}
-                {renderFields("Personal Information", personalFields)}
-                {renderFields("Address Information", addressFields)}
-                {renderFields("Professional Information", professionalFields)}
-
-                <div className="settings-actions">
-                    <button type="submit" className="save-btn" disabled={loading}>
-                        {loading ? "Saving..." : "Save Settings"}
-                    </button>
+            {loading ? (
+                <div className="skeleton-loading-container">
+                    <SkeletonFormSection fields={6} />
+                    <SkeletonFormSection fields={10} />
+                    <SkeletonFormSection fields={8} />
+                    <SkeletonFormSection fields={4} />
                 </div>
-            </form>
+            ) : (
+                <form className="settings-form" onSubmit={handleSubmit}>
+                    {renderFields("Profile Information", profileFields)}
+                    {renderFields("Personal Information", personalFields)}
+                    {renderFields("Address Information", addressFields)}
+                    {renderFields("Professional Information", professionalFields)}
+
+                    <div className="settings-actions">
+                        <button type="submit" className="save-btn" disabled={loading}>
+                            {loading ? "Saving..." : "Save Settings"}
+                        </button>
+                    </div>
+                </form>
+            )}
         </div>
     );
 }
