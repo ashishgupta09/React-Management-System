@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Permission, UserRole } from "../../interfaces/auth.interface";
+import "../../styles/roles.css";
 
 interface ManagedUser {
   id: string;
@@ -104,62 +105,42 @@ function RolesPermissionsPage() {
   };
 
   return (
-    <div>
-      <h2>Roles & Permissions</h2>
-      <p>Admin can change user role and component access here.</p>
+    <div className="roles-page">
+      <div className="roles-header">
+        <h1>Roles & Permissions</h1>
+        <p>Admin can change user role and component access here.</p>
+      </div>
 
-      <div style={{ display: "grid", gap: "20px", marginTop: "20px" }}>
+      <div className="roles-grid">
         {users.map((user) => (
-          <div
-            key={user.id}
-            style={{
-              border: "1px solid #e2e8f0",
-              borderRadius: "12px",
-              padding: "16px",
-              background: "#fff",
-            }}
-          >
-            <h3 style={{ marginBottom: "6px" }}>{user.name}</h3>
-            <p style={{ marginBottom: "12px", color: "#64748b" }}>{user.email}</p>
+          <div key={user.id} className="roles-card">
+            <div className="roles-card-header">
+              <div className="roles-card-info">
+                <h3>{user.name}</h3>
+                <p>{user.email}</p>
+              </div>
 
-            <div style={{ marginBottom: "16px" }}>
-              <label style={{ marginRight: "10px" }}>Role:</label>
-              <select
-                value={user.role}
-                onChange={(e) =>
-                  handleRoleChange(user.id, e.target.value as UserRole)
-                }
-              >
-                <option value="ADMIN">ADMIN</option>
-                <option value="MANAGER">MANAGER</option>
-                <option value="USER">USER</option>
-              </select>
+              <div className="roles-select-wrapper">
+                <label>Role:</label>
+                <select
+                  className="roles-select"
+                  value={user.role}
+                  onChange={(e) =>
+                    handleRoleChange(user.id, e.target.value as UserRole)
+                  }
+                >
+                  <option value="ADMIN">ADMIN</option>
+                  <option value="MANAGER">MANAGER</option>
+                  <option value="USER">USER</option>
+                </select>
+              </div>
             </div>
 
             <div>
-              <p style={{ marginBottom: "10px", fontWeight: 600 }}>
-                Permissions
-              </p>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                  gap: "10px",
-                }}
-              >
+              <p className="permissions-section-title">Permissions</p>
+              <div className="permissions-grid">
                 {allPermissions.map((permission) => (
-                  <label
-                    key={permission}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      padding: "8px 10px",
-                      border: "1px solid #e2e8f0",
-                      borderRadius: "8px",
-                    }}
-                  >
+                  <label key={permission} className="permission-label">
                     <input
                       type="checkbox"
                       checked={user.permissions.includes(permission)}

@@ -11,6 +11,7 @@ import type { UserData, UserFormData } from "../../interfaces/user.interface";
 import { initialFormData, sampleUserData } from "../../constants/user.constants";
 import ProfileDrawer from "../../components/ProfileDrawer";
 import { SkeletonTable } from "../../components/Skeleton";
+import { Eye, Pencil, Trash2 } from "lucide-react";
 import "../../styles/users.css";
 
 function Users() {
@@ -275,23 +276,25 @@ function Users() {
                                             <td>
                                                 <div className="action-buttons">
                                                     <button
-                                                        className="primary-btn"
+                                                        className="icon-btn view-btn"
                                                         onClick={() => openProfileDrawer(user)}
-                                                        style={{ padding: "8px 14px", fontSize: "12px" }}
+                                                        title="View Details"
                                                     >
-                                                        View Details
+                                                        <Eye size={16} />
                                                     </button>
                                                     <button
-                                                        className="edit-btn"
+                                                        className="icon-btn edit-btn"
                                                         onClick={() => openEditModal(user._id)}
+                                                        title="Edit"
                                                     >
-                                                        Edit
+                                                        <Pencil size={16} />
                                                     </button>
                                                     <button
-                                                        className="delete-btn"
+                                                        className="icon-btn delete-btn"
                                                         onClick={() => handleDelete(user._id)}
+                                                        title="Delete"
                                                     >
-                                                        Delete
+                                                        <Trash2 size={16} />
                                                     </button>
                                                 </div>
                                             </td>

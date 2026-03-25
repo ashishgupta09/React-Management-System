@@ -113,10 +113,12 @@
 }
 
 .reports-table-card {
-    background: var(--card-bg);
-    border-radius: 18px;
-    padding: 20px;
-    box-shadow: var(--shadow);
+  background: var(--card-bg);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
 }
 
 .reports-table-wrapper {
@@ -131,21 +133,41 @@
 
 .reports-table th,
 .reports-table td {
-    padding: 14px 12px;
-    text-align: left;
-    border-bottom: 1px solid #e2e8f0;
-    font-size: 14px;
+  padding: 14px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px;
+  color: var(--text-primary);
 }
 
 .reports-table th {
-    background: #f8fafc;
-    color: #334155;
+  background: var(--gradient-primary);
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reports-table th:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.reports-table th:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.reports-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.reports-table tbody tr:hover {
+  background: var(--bg-hover);
 }
 
 .empty-text {
-    text-align: center;
-    padding: 20px;
-    color: #94a3b8;
+  text-align: center;
+  padding: 20px;
+  color: var(--text-tertiary);
 }
 
 @media (max-width: 992px) {

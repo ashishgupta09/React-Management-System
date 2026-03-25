@@ -40,7 +40,13 @@
     border: 1px solid var(--border-color);
     position: relative;
     overflow: hidden;
+    border-top: 3px solid transparent;
 }
+
+.stat-card:nth-child(1) { border-top-color: #2563eb; }
+.stat-card:nth-child(2) { border-top-color: #06b6d4; }
+.stat-card:nth-child(3) { border-top-color: #8b5cf6; }
+.stat-card:nth-child(4) { border-top-color: #f59e0b; }
 
 .stat-card::before {
     content: '';

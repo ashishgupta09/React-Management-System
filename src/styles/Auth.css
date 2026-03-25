@@ -90,7 +90,8 @@
   gap: 16px;
 }
 
-.auth-form input {
+.auth-form input,
+.auth-form select {
   width: 100%;
   padding: 14px 18px;
   border: 1px solid var(--border-color);
@@ -106,7 +107,8 @@
   color: var(--text-tertiary);
 }
 
-.auth-form input:focus {
+.auth-form input:focus,
+.auth-form select:focus {
   background: var(--card-bg);
   border-color: var(--button-primary);
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);

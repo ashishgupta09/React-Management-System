@@ -12,6 +12,7 @@ import { getUsers } from "../../services/userService";
 import type { UserData } from "../../interfaces/user.interface";
 import type { Todo, TodoPriority } from "../../interfaces/todo.interface";
 import { SkeletonStatCard, SkeletonTable } from "../../components/Skeleton";
+import { CheckCircle, Circle, Pencil, Trash2 } from "lucide-react";
 import "../../styles/todo.css";
 
 type TodoFormData = {
@@ -316,24 +317,23 @@ function TodoList() {
             </div>
 
             <div className="todo-user-select-card">
-                <div className="todo-user-select">
-                    <label>Select User</label>
-                    <select
-                        value={selectedUserId}
-                        onChange={(e) => {
-                            setPage(1);
-                            setSelectedUserId(e.target.value);
-                        }}
-                        disabled={usersLoading}
-                    >
-                        <option value="">Select user</option>
-                        {users.map((user) => (
-                            <option key={user._id} value={user._id}>
-                                {user.firstName} {user.lastName}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                <label>Select User</label>
+                <select
+                    className="todo-user-select"
+                    value={selectedUserId}
+                    onChange={(e) => {
+                        setPage(1);
+                        setSelectedUserId(e.target.value);
+                    }}
+                    disabled={usersLoading}
+                >
+                    <option value="">Select user</option>
+                    {users.map((user) => (
+                        <option key={user._id} value={user._id}>
+                            {user.firstName} {user.lastName}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             <div className="todo-filters">
@@ -415,13 +415,16 @@ function TodoList() {
 
             <div className="todo-bulk-actions">
                 <button className="secondary-btn" onClick={() => handleBulkComplete(true)}>
-                    Mark Selected Completed
+                    <CheckCircle size={18} />
+                    <span>Mark Selected Completed</span>
                 </button>
                 <button className="secondary-btn" onClick={() => handleBulkComplete(false)}>
-                    Mark Selected Pending
+                    <Circle size={18} />
+                    <span>Mark Selected Pending</span>
                 </button>
                 <button className="delete-btn" onClick={handleBulkDelete}>
-                    Delete Selected
+                    <Trash2 size={18} />
+                    <span>Delete Selected</span>
                 </button>
             </div>
 
@@ -499,22 +502,25 @@ function TodoList() {
                                             <td>
                                                 <div className="action-buttons">
                                                     <button
-                                                        className="toggle-btn"
+                                                        className={`icon-btn toggle-btn ${item.completed ? 'completed' : 'pending'}`}
                                                         onClick={() => handleToggleCompleted(item)}
+                                                        title={item.completed ? "Mark Pending" : "Mark Completed"}
                                                     >
-                                                        Toggle
+                                                        {item.completed ? <CheckCircle size={16} /> : <Circle size={16} />}
                                                     </button>
                                                     <button
-                                                        className="edit-btn"
+                                                        className="icon-btn edit-btn"
                                                         onClick={() => openEditModal(item)}
+                                                        title="Edit Task"
                                                     >
-                                                        Edit
+                                                        <Pencil size={16} />
                                                     </button>
                                                     <button
-                                                        className="delete-btn"
+                                                        className="icon-btn delete-btn"
                                                         onClick={() => handleDelete(item._id)}
+                                                        title="Delete Task"
                                                     >
-                                                        Delete
+                                                        <Trash2 size={16} />
                                                     </button>
                                                 </div>
                                             </td>
