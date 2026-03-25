@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import type { RegisterRequest } from "../interfaces/auth.interface";
 import { registerUser } from "../services/authService";
-import type { RegisterRequest, UserRole } from "../interfaces/auth.interface";
+import { UserPlus } from "lucide-react";
 import "../styles/Auth.css";
 
 function Register() {
@@ -46,8 +47,11 @@ function Register() {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>Create Account</h2>
-        <p className="auth-subtitle">Register to continue</p>
+        <div className="auth-header">
+          <UserPlus size={48} className="auth-icon" />
+          <h2>Create Account</h2>
+          <p className="auth-subtitle">Join our professional community</p>
+        </div>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <input

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { loginUser } from "../services/authService";
 import type { LoginRequest } from "../interfaces/auth.interface";
 import { useAuth } from "../context/AuthContext";
+import { UserCircle } from "lucide-react";
 import "../styles/Auth.css";
 
 function Login() {
@@ -52,8 +53,11 @@ function Login() {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>Welcome Back</h2>
-        <p className="auth-subtitle">Please sign in to continue</p>
+        <div className="auth-header">
+          <UserCircle size={48} className="auth-icon" />
+          <h2>Welcome to JobPortal</h2>
+          <p className="auth-subtitle">Sign in to your account</p>
+        </div>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <input
