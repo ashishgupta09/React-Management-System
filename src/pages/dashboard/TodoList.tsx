@@ -12,7 +12,7 @@ import { getUsers } from "../../services/userService";
 import type { UserData } from "../../interfaces/user.interface";
 import type { Todo, TodoPriority } from "../../interfaces/todo.interface";
 import { SkeletonStatCard, SkeletonTable } from "../../components/Skeleton";
-import { CheckCircle, Circle, Pencil, Trash2, Filter, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { CheckCircle, Circle, Pencil, Trash2, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import "../../styles/todo.css";
 
 type TodoFormData = {
@@ -41,9 +41,9 @@ function TodoList() {
     const [search, setSearch] = useState("");
     const [priorityFilter, setPriorityFilter] = useState<"" | TodoPriority>("");
     const [completedFilter, setCompletedFilter] = useState<"" | "true" | "false">("");
-    const [dateFilter, setDateFilter] = useState<"all" | "today" | "week" | "month">("all");
-    const [customDateFrom, setCustomDateFrom] = useState("");
-    const [customDateTo, setCustomDateTo] = useState("");
+    // const [dateFilter, setDateFilter] = useState<"all" | "today" | "week" | "month">("all");
+    // const [customDateFrom, setCustomDateFrom] = useState("");
+    // const [customDateTo, setCustomDateTo] = useState("");
     const [sortBy, setSortBy] = useState<"createdAt" | "todo" | "priority">("createdAt");
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
