@@ -8,10 +8,11 @@ import {
     PanelLeftClose,
     PanelLeftOpen,
     CheckSquare,
+    ShieldCheck,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
-type SectionType = "overview" | "users" | "reports" | "tasks" | "settings";
+type SectionType = "overview" | "users" | "reports" | "tasks" | "settings" | "roles";
 
 interface SidebarProps {
     activeSection: SectionType;
@@ -27,39 +28,44 @@ function Sidebar({
     setIsOpen,
 }: SidebarProps) {
     const navigate = useNavigate();
-    const { logout } = useAuth();
+    const { hasPermission, hasRole } = useAuth();
 
-    const menuItems: {
+    const menuItems = [
+        hasPermission("view_overview") && {
+            key: "overview" as SectionType,
+            label: "Overview",
+            icon: <LayoutDashboard size={20} />,
+        },
+        hasPermission("view_users") && {
+            key: "users" as SectionType,
+            label: "Users",
+            icon: <Users size={20} />,
+        },
+        hasPermission("view_reports") && {
+            key: "reports" as SectionType,
+            label: "Reports",
+            icon: <FileBarChart2 size={20} />,
+        },
+        hasPermission("view_tasks") && {
+            key: "tasks" as SectionType,
+            label: "Tasks",
+            icon: <CheckSquare size={20} />,
+        },
+        hasPermission("manage_settings") && {
+            key: "settings" as SectionType,
+            label: "Settings",
+            icon: <Settings size={20} />,
+        },
+        hasRole("ADMIN") && {
+            key: "roles" as SectionType,
+            label: "Roles & Access",
+            icon: <ShieldCheck size={20} />,
+        },
+    ].filter(Boolean) as {
         key: SectionType;
         label: string;
         icon: React.ReactNode;
-    }[] = [
-            {
-                key: "overview",
-                label: "Overview",
-                icon: <LayoutDashboard size={20} />,
-            },
-            {
-                key: "users",
-                label: "Users",
-                icon: <Users size={20} />,
-            },
-            {
-                key: "reports",
-                label: "Reports",
-                icon: <FileBarChart2 size={20} />,
-            },
-            {
-                key: "tasks",
-                label: "Tasks",
-                icon: <CheckSquare size={20} />,
-            },
-            {
-                key: "settings",
-                label: "Settings",
-                icon: <Settings size={20} />,
-            },
-        ];
+    }[];
 
     const handleMenuClick = (section: SectionType) => {
         setActiveSection(section);
@@ -69,11 +75,6 @@ function Sidebar({
             setIsOpen(false);
         }
     };
-
-    // const handleLogout = () => {
-    //     logout();
-    //     navigate("/login", { replace: true });
-    // };
 
     return (
         <div className="sidebar-inner">
@@ -101,12 +102,6 @@ function Sidebar({
                     </li>
                 ))}
             </ul>
-            {/* 
-            <div className="sidebar-footer">
-                <button type="button" className="logout-btn" onClick={handleLogout}>
-                    {isOpen ? "Logout" : "⎋"}
-                </button>
-            </div> */}
         </div>
     );
 }

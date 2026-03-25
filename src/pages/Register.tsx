@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { registerUser } from "../services/authService";
-import type { RegisterRequest } from "../interfaces/auth.interface";
+import type { RegisterRequest, UserRole } from "../interfaces/auth.interface";
 import "../styles/Auth.css";
 
 function Register() {
@@ -11,13 +11,15 @@ function Register() {
   const [formData, setFormData] = useState<RegisterRequest>({
     name: "",
     email: "",
-    phone: "",
     password: "",
+    role: "USER",
   });
 
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
 
     setFormData((prev) => ({
@@ -32,15 +34,10 @@ function Register() {
     try {
       setLoading(true);
       const result = await registerUser(formData);
-
       toast.success(result.message || "Registration successful");
-      navigate("/login");
+      navigate("/login", { replace: true });
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("Something went wrong");
-      }
+      toast.error(error instanceof Error ? error.message : "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -50,7 +47,7 @@ function Register() {
     <div className="auth-container">
       <div className="auth-card">
         <h2>Create Account</h2>
-        <p className="auth-subtitle">Join us and get started today</p>
+        <p className="auth-subtitle">Register to continue</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <input
@@ -59,6 +56,7 @@ function Register() {
             placeholder="Enter your name"
             value={formData.name}
             onChange={handleChange}
+            required
           />
 
           <input
@@ -67,14 +65,7 @@ function Register() {
             placeholder="Enter your email"
             value={formData.email}
             onChange={handleChange}
-          />
-
-          <input
-            type="phone"
-            name="phone"
-            placeholder="Enter your phone"
-            value={formData.phone}
-            onChange={handleChange}
+            required
           />
 
           <input
@@ -83,7 +74,14 @@ function Register() {
             placeholder="Enter your password"
             value={formData.password}
             onChange={handleChange}
+            required
           />
+
+          <select name="role" value={formData.role} onChange={handleChange}>
+            <option value="ADMIN">ADMIN</option>
+            <option value="MANAGER">MANAGER</option>
+            <option value="USER">USER</option>
+          </select>
 
           <button type="submit" disabled={loading}>
             {loading ? "Registering..." : "Register"}
