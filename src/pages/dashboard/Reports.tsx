@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { getUsers } from "../../services/userService";
 import type { UserData } from "../../interfaces/user.interface";
 import { SkeletonStatCard, SkeletonTable } from "../../components/Skeleton";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import "../../styles/reports.css";
 
 function Reports() {
@@ -10,6 +11,8 @@ function Reports() {
     const [search, setSearch] = useState("");
     const [roleFilter, setRoleFilter] = useState("");
     const [genderFilter, setGenderFilter] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const usersPerPage = 10;
 
     useEffect(() => {
         loadUsers();
@@ -46,6 +49,13 @@ function Reports() {
             return matchesSearch && matchesRole && matchesGender;
         });
     }, [users, search, roleFilter, genderFilter]);
+
+    // Pagination logic
+    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+    const paginatedUsers = filteredUsers.slice(
+        (currentPage - 1) * usersPerPage,
+        currentPage * usersPerPage
+    );
 
     const totalUsers = filteredUsers.length;
     const totalAdmins = filteredUsers.filter((user) => user.role === "admin").length;
@@ -218,10 +228,10 @@ function Reports() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredUsers.length > 0 ? (
-                                    filteredUsers.map((user, index) => (
+                                {paginatedUsers.length > 0 ? (
+                                    paginatedUsers.map((user, index) => (
                                         <tr key={user._id}>
-                                            <td>{index + 1}</td>
+                                            <td>{(currentPage - 1) * usersPerPage + index + 1}</td>
                                             <td>{`${user.firstName} ${user.lastName}`}</td>
                                             <td>{user.email}</td>
                                             <td>{user.username}</td>
@@ -240,6 +250,32 @@ function Reports() {
                                 )}
                             </tbody>
                         </table>
+                        <div className="pagination-row">
+                            <div className="pagination-info">
+                                Showing {(currentPage - 1) * usersPerPage + 1} - {Math.min(currentPage * usersPerPage, filteredUsers.length)} of {filteredUsers.length}
+                            </div>
+                            <div className="pagination-actions">
+                                <button
+                                    className="secondary-btn pagination-btn"
+                                    disabled={currentPage === 1}
+                                    onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                                    title="Previous Page"
+                                >
+                                    <ChevronLeft size={18} />
+                                </button>
+                                <span className="pagination-info-text">
+                                    Page {currentPage} of {totalPages}
+                                </span>
+                                <button
+                                    className="secondary-btn pagination-btn"
+                                    disabled={currentPage >= totalPages}
+                                    onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                                    title="Next Page"
+                                >
+                                    <ChevronRight size={18} />
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

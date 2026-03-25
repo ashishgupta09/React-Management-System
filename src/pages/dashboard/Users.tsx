@@ -11,7 +11,7 @@ import type { UserData, UserFormData } from "../../interfaces/user.interface";
 import { initialFormData, sampleUserData } from "../../constants/user.constants";
 import ProfileDrawer from "../../components/ProfileDrawer";
 import { SkeletonTable } from "../../components/Skeleton";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import "../../styles/users.css";
 
 function Users() {
@@ -315,21 +315,23 @@ function Users() {
                             </div>
                             <div className="pagination-actions">
                                 <button
-                                    className="secondary-btn"
+                                    className="secondary-btn pagination-btn"
                                     disabled={currentPage === 1}
                                     onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                                    title="Previous Page"
                                 >
-                                    Previous
+                                    <ChevronLeft size={18} />
                                 </button>
-                                <span>
+                                <span className="pagination-info-text">
                                     Page {currentPage} of {totalPages}
                                 </span>
                                 <button
-                                    className="secondary-btn"
+                                    className="secondary-btn pagination-btn"
                                     disabled={currentPage >= totalPages}
                                     onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                                    title="Next Page"
                                 >
-                                    Next
+                                    <ChevronRight size={18} />
                                 </button>
                             </div>
                         </div>

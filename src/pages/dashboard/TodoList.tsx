@@ -12,7 +12,7 @@ import { getUsers } from "../../services/userService";
 import type { UserData } from "../../interfaces/user.interface";
 import type { Todo, TodoPriority } from "../../interfaces/todo.interface";
 import { SkeletonStatCard, SkeletonTable } from "../../components/Skeleton";
-import { CheckCircle, Circle, Pencil, Trash2 } from "lucide-react";
+import { CheckCircle, Circle, Pencil, Trash2, Filter, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
 import "../../styles/todo.css";
 
 type TodoFormData = {
@@ -41,6 +41,12 @@ function TodoList() {
     const [search, setSearch] = useState("");
     const [priorityFilter, setPriorityFilter] = useState<"" | TodoPriority>("");
     const [completedFilter, setCompletedFilter] = useState<"" | "true" | "false">("");
+    const [dateFilter, setDateFilter] = useState<"all" | "today" | "week" | "month">("all");
+    const [customDateFrom, setCustomDateFrom] = useState("");
+    const [customDateTo, setCustomDateTo] = useState("");
+    const [sortBy, setSortBy] = useState<"createdAt" | "todo" | "priority">("createdAt");
+    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+    const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
     const [page, setPage] = useState(1);
     const [limit] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
@@ -57,7 +63,7 @@ function TodoList() {
             setTotalPages(1);
             setSelectedIds([]);
         }
-    }, [selectedUserId, page, priorityFilter, completedFilter, search]);
+    }, [selectedUserId, page, priorityFilter, completedFilter, search, sortBy, sortOrder]);
 
     const loadUsers = async () => {
         try {
@@ -83,8 +89,8 @@ function TodoList() {
                 userId,
                 page,
                 limit,
-                sortBy: "createdAt",
-                order: "desc",
+                sortBy,
+                order: sortOrder,
                 priority: priorityFilter,
                 completed:
                     completedFilter === ""
@@ -374,7 +380,51 @@ function TodoList() {
                     <option value="true">Completed</option>
                     <option value="false">Pending</option>
                 </select>
+
+                <button
+                    className="secondary-btn"
+                    onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                    disabled={!selectedUserId}
+                >
+                    <Filter size={16} />
+                    <span>Advanced Filters</span>
+                </button>
             </div>
+
+            {showAdvancedFilters && (
+                <div className="todo-advanced-filters">
+                    <div className="filter-group">
+                        <label>Sort by</label>
+                        <select
+                            value={sortBy}
+                            onChange={(e) => {
+                                setPage(1);
+                                setSortBy(e.target.value as "createdAt" | "todo" | "priority");
+                            }}
+                            disabled={!selectedUserId}
+                        >
+                            <option value="createdAt">Date Created</option>
+                            <option value="todo">Todo Text</option>
+                            <option value="priority">Priority</option>
+                        </select>
+                    </div>
+
+                    <div className="filter-group">
+                        <label>Sort Order</label>
+                        <select
+                            value={sortOrder}
+                            onChange={(e) => {
+                                setPage(1);
+                                setSortOrder(e.target.value as "asc" | "desc");
+                            }}
+                            disabled={!selectedUserId}
+                        >
+                            <option value="desc">Newest First</option>
+                            <option value="asc">Oldest First</option>
+                        </select>
+                    </div>
+                </div>
+            )}
 
             <div className="todo-stats">
                 {!selectedUserId ? (
@@ -541,23 +591,25 @@ function TodoList() {
 
             <div className="pagination">
                 <button
-                    className="secondary-btn"
+                    className="secondary-btn pagination-btn"
                     disabled={page === 1 || !selectedUserId}
                     onClick={() => setPage((prev) => prev - 1)}
+                    title="Previous Page"
                 >
-                    Previous
+                    <ChevronLeft size={18} />
                 </button>
 
-                <span>
+                <span className="pagination-info">
                     Page {page} of {totalPages}
                 </span>
 
                 <button
-                    className="secondary-btn"
+                    className="secondary-btn pagination-btn"
                     disabled={page === totalPages || !selectedUserId}
                     onClick={() => setPage((prev) => prev + 1)}
+                    title="Next Page"
                 >
-                    Next
+                    <ChevronRight size={18} />
                 </button>
             </div>
 
